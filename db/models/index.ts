@@ -1,7 +1,5 @@
-import tools from "./data/tools";
-import certifications from "./data/certifications";
-import clients from "./data/clients";
-import experiences from "./data/experiences";
-import projects from "./data/projects";
+import MetaUsers from "./analytics/meta_users";
 
-export { tools, certifications, clients, experiences, projects };
+const metaUsers = new MetaUsers();
+
+export { metaUsers };

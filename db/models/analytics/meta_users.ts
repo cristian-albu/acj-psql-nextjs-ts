@@ -15,7 +15,7 @@ class MetaUsers extends Model {
         }
 
         public async getMetaUsers(): Promise<T_MetaUser[]> {
-                const result = await this.query_db(this.SQL_SELECT_ALL);
+                const result = await this.queryDb(this.SQL_SELECT_ALL);
                 return result.rows;
         }
 
@@ -23,7 +23,7 @@ class MetaUsers extends Model {
                 const err = this.validateMetaUserId(id);
                 if (err.error) return err;
 
-                const result = await this.query_db(this.SQL_SELECT_BY_ID, [id]);
+                const result = await this.queryDb(this.SQL_SELECT_BY_ID, [id]);
                 if (result.rows.length === 0) return { error: "No meta_user found" };
                 return result.rows[0];
         }
@@ -32,7 +32,7 @@ class MetaUsers extends Model {
                 const err = this.validateMetaUserId(data.meta_user_id);
                 if (err.error) return err;
 
-                const result = await this.query_db(this.SQL_INSERT, [data.meta_user_id]);
+                const result = await this.queryDb(this.SQL_INSERT, [data.meta_user_id]);
 
                 return result.rows[0];
         }
@@ -41,7 +41,7 @@ class MetaUsers extends Model {
                 const err = this.validateMetaUserId(id);
                 if (err.error) return err;
 
-                const result = await this.query_db(this.SQL_DELETE_BY_ID, [id]);
+                const result = await this.queryDb(this.SQL_DELETE_BY_ID, [id]);
                 if (result.rows.length === 0) return { error: "No meta_user found" };
                 return result.rows[0];
         }

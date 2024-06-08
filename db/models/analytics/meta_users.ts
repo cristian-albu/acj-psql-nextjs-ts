@@ -1,5 +1,11 @@
-import { T_MetaUser, T_MetaUserBuildShape, T_ModelError } from "@/db/types";
 import Model from "../model";
+
+export type T_MetaUser = {
+        meta_user_id: string;
+        created_at: string; // Using string to represent TIMESTAMP
+};
+
+export type T_MetaUserBuildShape = Omit<T_MetaUser, "created_at">;
 
 class MetaUsers extends Model {
         private readonly tableName = "meta_users";
@@ -9,23 +15,36 @@ class MetaUsers extends Model {
                 let error = null;
                 if (id.length < 7 || id.length > 40) error = "Invalid id size";
                 if (!/^[0-9a-fA-F:.:\[\]]+$/.test(id)) error = "Invalid id characters";
-                return { error };
+                return { data: null, error };
         }
 
         public async getMetaUsers() {
-                return this.getList(this.tableName);
+                const results = await this.getList<T_MetaUser>(this.tableName);
+                return results;
         }
 
         public async getMetaUser(id: string) {
-                return this.getSingle(this.tableName, this.tableId, id);
+                const validation = this.validateMetaUserId(id);
+                if (validation.error) return validation;
+
+                const results = await this.getSingle<T_MetaUser>(this.tableName, this.tableId, id);
+                return results;
         }
 
         public async createMetaUser(data: T_MetaUserBuildShape) {
-                return this.createSingle(this.tableName, data);
+                const validation = this.validateMetaUserId(data.meta_user_id);
+                if (validation.error) return validation;
+
+                const results = await this.createSingle<T_MetaUser>(this.tableName, data);
+                return results;
         }
 
         public async deleteMetaUser(id: string) {
-                return this.deleteSingle(this.tableName, this.tableId, id);
+                const validation = this.validateMetaUserId(id);
+                if (validation.error) return validation;
+
+                const results = await this.deleteSingle<T_MetaUser>(this.tableName, this.tableId, id);
+                return results;
         }
 }
 

@@ -70,14 +70,6 @@ export type T_ExperienceTool = {
         tool_id: number;
 };
 
-// Meta users table
-export type T_MetaUser = {
-        meta_user_id: string;
-        created_at: string; // Using string to represent TIMESTAMP
-};
-
-export type T_MetaUserBuildShape = Omit<T_MetaUser, "created_at">;
-
 // Messages table
 export type T_Message = {
         message_id: number;

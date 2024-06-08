@@ -9,7 +9,7 @@ jest.mock("../../client", () => ({
 
 describe("builds queries as expected", () => {
         it("selectAll query", () => {
-                const queryDbSpy = jest.spyOn(Model.prototype, "queryDb");
+                const queryDbSpy = jest.spyOn(Model.prototype, "queryDbRead");
                 const TestModel = new Model();
                 const query = "SELECT * FROM my_table;";
 
@@ -18,7 +18,7 @@ describe("builds queries as expected", () => {
         });
 
         it("selectOne query", () => {
-                const queryDbSpy = jest.spyOn(Model.prototype, "queryDb");
+                const queryDbSpy = jest.spyOn(Model.prototype, "queryDbRead");
                 const TestModel = new Model();
                 const query = "SELECT * FROM my_table WHERE my_table_id=$1;";
 

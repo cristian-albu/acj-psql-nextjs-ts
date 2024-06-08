@@ -14,6 +14,24 @@ type T_QueryDb<T> =
           };
 
 class Model {
+        public async queryDbRead<T>(query: string, args?: Array<T_Value>): Promise<T_QueryDb<T>> {
+                let client: undefined | PoolClient;
+
+                try {
+                        client = await pool.connect();
+                        const result = await client.query(query, args);
+
+                        if (result.rows && result.rows.length > 0) {
+                                return { error: null, data: result.rows };
+                        }
+
+                        return { error: "No results found", data: null };
+                } catch (error) {
+                        return { error: `Database query error: ${error}`, data: null };
+                } finally {
+                        if (client) client.release();
+                }
+        }
         public async queryDb<T>(query: string, args?: Array<T_Value>): Promise<T_QueryDb<T>> {
                 let client: undefined | PoolClient;
 
@@ -39,13 +57,13 @@ class Model {
 
         public async getList<T>(tableName: string) {
                 const query = `SELECT * FROM ${tableName};`;
-                const results = await this.queryDb<T>(query);
+                const results = await this.queryDbRead<T>(query);
                 return results;
         }
 
         public async getSingle<T>(tableName: string, tableId: string, id: string | number) {
                 const query = `SELECT * FROM ${tableName} WHERE ${tableId}=$1;`;
-                const results = await this.queryDb<T>(query, [id]);
+                const results = await this.queryDbRead<T>(query, [id]);
                 return results;
         }
 
